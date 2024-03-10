@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.testng.annotations.DataProvider;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class UtilExcel {
@@ -20,13 +21,24 @@ public class UtilExcel {
 
     static Workbook book;
     static Sheet sheet;
-    public static String File_Name = "src/test/Resource/UserNameEg.xlsx";
+    public static String File_Name = "src/test/resources/TestDataExcel.xlsx";
 
     public static Object[][] getTestData(String sheetName) throws IOException {
+
         //write the logic to read the excel file and convert to 2D array
+
         FileInputStream file = null;
-        file = new FileInputStream(File_Name);
-        book = WorkbookFactory.create(file);
+        try {
+            file = new FileInputStream(File_Name);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            book = WorkbookFactory.create(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         sheet = book.getSheet(sheetName);
         Object[][] data = new Object[sheet.getLastRowNum()][sheet.getRow(0).getLastCellNum()];
 
